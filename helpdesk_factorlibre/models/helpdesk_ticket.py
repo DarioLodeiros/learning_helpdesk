@@ -38,11 +38,13 @@ class HelpdeskTicket(models.Model):
     ticket_id = fields.Integer(string="Ticket Number")
 
     priority = fields.Selection([
-        ('Zero', _('Sin prioridad')),
-        ('Low', _('Prioridad Baja')),
-        ('Medium', _('Prioridad Media')),
-        ('High', _('Prioridad Alta')),
-    ], string='Priority', default=_get_default_priority, help="Choose a priority for the ticket")
+        ('Zero', _('No Priority')),
+        ('Low', _('Low Priority')),
+        ('Medium', _('Standard Priority')),
+        ('High', _('High Priority')),
+    ], string='Priority',
+        default=_get_default_priority,
+        help="Choose a priority for the ticket")
 
     user_id = fields.Many2one(
         string='Assigned to',
@@ -72,7 +74,7 @@ class HelpdeskTicket(models.Model):
             'user_id': self.env.user.id
         })
 
-    ### On Change Methods ###
+    # On Change Methods
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -84,7 +86,7 @@ class HelpdeskTicket(models.Model):
                     'customer_mail': partner.email
                 })
 
-    ### Depends Methods ###
+    # Depends Methods
 
     @api.depends('user_id')
     def _compute_assignation_date(self):
@@ -97,11 +99,12 @@ class HelpdeskTicket(models.Model):
             if stage_id.name in ["Done", "Cancelled"]:
                 record.closing_date = fields.Datetime.now()
 
-    ### CRUD Methods ###
+    # CRUD Methods
 
     @api.model
     def create(self, vals):
-        if vals.get("partner_id") and ("customer_name" not in vals or "customer_mail" not in vals):
+        if vals.get("partner_id") and (
+                "customer_name" not in vals or "customer_mail" not in vals):
             partner = self.env["res.partner"].browse(vals["partner_id"])
             vals.setdefault("customer_name", partner.name)
             vals.setdefault("customer_mail", partner.email)
