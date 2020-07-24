@@ -24,7 +24,7 @@ class ResPartner(models.Model):
     @api.multi
     def _compute_count_tickets(self):
         for record in self:
-            #Codigo mas eficiente: record.count_tickets = len(record.helpdesk_ticket_ids)
+            #REVIEW: use "record.count_tickets = len(record.helpdesk_ticket_ids)" to efficient code
             tickets = self.env['helpdesk.ticket'].search([
                 ('partner_id', '=', record.id)
                 ])
