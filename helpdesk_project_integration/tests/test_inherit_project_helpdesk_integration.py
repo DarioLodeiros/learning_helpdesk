@@ -21,11 +21,15 @@ class TestProjectIntegration(common.SavepointCase):
             'description': 'Ticket test',
             'project_id': cls.project_1.id
         })
-        tickets_on_project_id_1 = self.project.search(
-            ['id', '=', cls.project_1.id]).ticket_ids
+        cls.tickets_on_project_id_1 = cls.project_1.ticket_ids
 
-        tickets_on_project_id_2 = self.project.search(
-            ['id', '=', cls.project_2.id]).ticket_ids
+        cls.tickets_on_project_id_2 = cls.project_2.ticket_ids
+
+        cls.open_tickets_on_project_id_1 = cls.project_1.ticket_ids.filtered(
+            lambda ticket: ticket.stage.closed is False)
+
+        cls.open_tickets_on_project_id_2 = cls.project_2.ticket_ids.filtered(
+            lambda ticket: ticket.stage.closed is False)
 
     def test_helpdesk_ticket_project_id(self):
         """
@@ -41,9 +45,9 @@ class TestProjectIntegration(common.SavepointCase):
         """
         Check ticket count by project
         """
-        tickets_on_project_id_1 = self.tickets_on_project_id_1
+        tickets_on_project_id_1 = self.project_1.task_count
 
-        tickets_on_project_id_2 = self.tickets_on_project_id_2
+        tickets_on_project_id_2 = self.project_2.task_count
 
         self.ticket.write({
             'project_id': self.project_2.id
@@ -51,14 +55,24 @@ class TestProjectIntegration(common.SavepointCase):
 
         self.assertEqual(len(self.tickets_on_project_1) - 1,
                          len(tickets_on_project_id_1),
-                         f"Number of ticket on {self.project_1} is not correct")
+                         f"Number of ticket on {self.project_1}\
+                            is not correct")
 
         self.assertEqual(len(self.tickets_on_project_2) + 1,
                          len(tickets_on_project_id_2),
-                         f"Number of ticket on {self.project_2} is not correct")
+                         f"Number of ticket on {self.project_2}\
+                            is not correct")
 
     def test_helpdesk_ticket_count_open_by_project(self):
 
-        tickets_on_project_id_1 = self.tickets_on_project_id_1.filtered
+        open_tickets_on_project_id_1 = self.tickets_on_project_id_1.filtered
 
-        tickets_on_project_id_2 = self.tickets_on_project_id_2.filtered
+        self.ticket.stage.write({
+            'closed': True
+
+        })
+
+        self.assertEqual(len(self.open_tickets_on_project_1) - 1,
+                         len(open_tickets_on_project_id_1),
+                         f"Number of open tickets on {self.project_1}\
+                            is not correct")
