@@ -1,0 +1,1 @@
+from . import test_inherit_project_helpdesk_integration
