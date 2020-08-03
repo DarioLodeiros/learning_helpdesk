@@ -6,7 +6,9 @@
     'description': """
 Module to integrate Project inside Helpdesk.
     """,
-    'depends': [],
-    'data': [],
+    'depends': ['project', 'helpdesk_factorlibre'],
+    'data': [
+        'views/inherit_view_project_kanban.xml'
+    ],
     'installable': True
 }
