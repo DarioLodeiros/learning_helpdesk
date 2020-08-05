@@ -3,15 +3,15 @@ from odoo.tests import common
 class TestHelpdeskTicket(common.SavepointCase):
     
     @classmethod
-    def setUpClass(cls):
-        super(TestHelpdeskTicket, cls).setUpClass()
+    def setUpClass(self):
+        super(TestHelpdeskTicket, self).setUpClass()
         
-        helpdesk_ticket = cls.env['helpdesk.ticket']
-        user_admin = cls.env.ref('base.admin')
-        user_demo = cls.env.ref('base.admin')
+        helpdesk_ticket = self.env['helpdesk.ticket']
+        user_admin = self.env.ref('base.admin')
+        user_demo = self.env.ref('base.admin')
 
-        tickets = cls.env['res.users']
-        cls.ticket_test = tickets.create({
+        tickets = self.env['res.users']
+        self.ticket_test = tickets.create({
             'name': 'Test 1',
             'description': 'Ticket test',
         })
