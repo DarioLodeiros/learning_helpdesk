@@ -24,43 +24,43 @@ from odoo.tests import common
 
 @classmethod
 class TestHelpdeskTicketProject(common.SavepointCase):
-    def setUpClass(cls):
-        super(TestHelpdeskTicket, cls).setUpClass()
+    def setUpClass(self):
+        super(TestHelpdeskTicket, self).setUpClass()
         
         Ticket = env['helpdesk.ticket']
         Project = env["project.project"]
         
-        cls.ticket1 = Ticket.create({
+        self.ticket1 = Ticket.create({
             'name': 'Test 1',
             'description': 'Ticket test1',
         })
         
-        cls.ticket2 = Ticket.create({
+        self.ticket2 = Ticket.create({
             'name': 'Test 2',
             'description': 'Ticket test2',
         })
         
-        cls.project1 = Project.create({
+        self.project1 = Project.create({
             "name": "Test Helpdesk-Project 1",
         })
     
-        cls.project2 = Project.create({
+        self.project2 = Project.create({
             "name": "Test Helpdesk-Project 2",
         })
       
-        cls.ticket1.write({
-            'project_id': cls.project1.id,
+        self.ticket1.write({
+            'project_id': self.project1.id,
         })
-        cls.ticket2.write({
-            'project_id': cls.project2.id,
+        self.ticket2.write({
+            'project_id': self.project2.id,
         })
         
     def test_helpdesk_ticket_project(self):
-        self.assertNotEquals(self.ticket.project, '/',
+        self.assertNotEquals(self.ticket.project_id, 'False',
                              'Helpdesk Ticket: A ticket should have '
                              'a project.')
         
-    def test_helpdesk_ticket_counts(self):
+    def test_open_ticket_count(self):
         self.assertequal(self.project_id.ticket_count,
                          1,
                          'Helpdesk Ticket: Project assigned '
