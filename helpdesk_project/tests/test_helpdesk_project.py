@@ -4,36 +4,36 @@ from odoo.tests import common
 
 @classmethod
 class TestHelpdeskTicketProject(common)
-    def ticket_in_proyect(cls):
-        super(TestHelpdeskTicketProject, cls).setUpClass()
+    def ticket_in_proyect(self):
+        super(TestHelpdeskTicketProject, self).setUpClass()
         
         Ticket = env['helpdesk.ticket']
         Project = env["project.project"]
         
         #ticket belongs to a project
         -we create the new ticket
-        cls.ticket = Ticket.create({
+        self.ticket = Ticket.create({
             'name': 'Test',
             'description': 'Ticket test',
         })
         
         -assign the new ticket to a project
         
-        cls.project = Project.create({
+        self.project = Project.create({
             'name': 'Test Helpdesk-Project',
         })
-        cls.ticket.write({
-            'project_id': cls.project.id,
+        self.ticket.write({
+            'project_id': self.project.id,
         })
         
         -button ticket count +1
-        cls.project.write({
-            'ticket_count': cls-ticket_count+1
+        self.project.write({
+            'ticket_count': self.ticket_count+1
         })
         -check the count of the button is right
     
     def test_helpdesk_ticket_project(self):
-        self.assertNotEquals(self.ticket.project, '/',
+        self.assertNotEquals(self.ticket.project_id, 'False',
                              'Helpdesk Ticket: A ticket should have '
                              'a project.')
                              
